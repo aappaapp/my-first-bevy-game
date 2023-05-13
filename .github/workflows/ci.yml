@@ -1,0 +1,21 @@
+name: build
+on: push
+
+env:
+    binary-name: my-first-bevy-game
+jobs:
+    build-windows:
+        runs-on: windows-2022
+        steps:
+            - name: install Rust 1.69.0
+              uses: actions-rs/toolchain@v1
+              with:
+                  target: x86_64-pc-windows-msvc
+                  toolchain: 1.69.0
+            - name: build
+              run: cargo build -r --target x86_64-pc-windows-msvc
+            - name: upload artifact
+              uses: actions/upload-artifact@v3
+              with:
+                  name: Windows Build
+                  path: target/x86_64-pc-windows-msvc/release/${{ env.binary-name }}.exe
