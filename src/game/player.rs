@@ -1,40 +1,44 @@
+use super::{setup_game, GameData};
+use crate::types::AppState;
 use bevy::prelude::*;
 
 pub struct Plug;
 
 impl Plugin for Plug {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(spawn_player).add_system(movement);
+        app.add_system(
+            setup_player
+                .after(setup_game)
+                .in_schedule(OnEnter(AppState::Game)),
+        )
+        .add_system(update_player);
     }
 }
 
 #[derive(Component)]
 pub struct Player;
 
-#[derive(Clone, Copy, Eq, PartialEq, PartialOrd, Ord)]
-struct Position {
-    x: i32,
-    y: i32,
-}
-
-fn spawn_player(mut commands: Commands) {
-    commands.spawn((
-        Player,
-        SpriteBundle {
-            sprite: Sprite {
-                color: Color::rgb(1.0, 0.0, 0.0),
+pub fn setup_player(mut commands: Commands, game_data: Res<GameData>) {
+    let player = commands
+        .spawn((
+            Player,
+            SpriteBundle {
+                sprite: Sprite {
+                    color: Color::rgb(1.0, 0.0, 0.0),
+                    ..default()
+                },
+                transform: Transform {
+                    scale: Vec3::new(50.0, 50.0, 0.0),
+                    ..default()
+                },
                 ..default()
             },
-            transform: Transform {
-                scale: Vec3::new(50.0, 50.0, 0.0),
-                ..default()
-            },
-            ..default()
-        },
-    ));
+        ))
+        .id();
+    commands.entity(game_data.game_entity).add_child(player);
 }
 
-fn movement(
+pub fn update_player(
     input: Res<Input<KeyCode>>,
     mut query: Query<(&Player, &mut Transform)>,
     time: Res<Time>,
