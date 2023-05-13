@@ -1,25 +1,19 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod game;
-mod types;
-mod ui;
+mod plugins;
+mod state;
 
-use bevy::{prelude::*, window::WindowResolution};
-use types::AppState;
+use self::{
+    plugins::{game::GamePlugin, main_menu::MainMenuPlugin},
+    state::AppState,
+};
+use bevy::prelude::*;
 
 fn main() {
     App::new()
         .add_state::<AppState>()
-        // .add_plugin(bevy_egui::EguiPlugin)
-        .add_plugin(game::Plug)
-        .add_plugin(ui::Plug)
-        .add_plugins(DefaultPlugins.set(WindowPlugin {
-            primary_window: Some(Window {
-                resizable: false,
-                resolution: WindowResolution::new(360., 640.),
-                ..default()
-            }),
-            ..default()
-        }))
+        .add_plugins(DefaultPlugins)
+        .add_plugin(MainMenuPlugin)
+        .add_plugin(GamePlugin)
         .run();
 }
