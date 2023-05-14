@@ -12,7 +12,7 @@ pub fn update(
     for (_player, mut transform) in query.iter_mut() {
         *y_speed -= 10.0;
         if input.any_just_pressed([KeyCode::Space, KeyCode::Return]) {
-            *y_speed = 500.0;
+            *y_speed = 250.0;
         }
         transform.translation.y += *y_speed * time.delta_seconds();
     }

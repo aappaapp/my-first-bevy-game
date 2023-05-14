@@ -29,7 +29,6 @@ pub fn setup(mut commands: Commands) {
     commands
         .spawn((Game, SpatialBundle { ..default() }))
         .with_children(|parent| {
-            parent.spawn(Camera2dBundle { ..default() });
             parent.spawn((
                 Player,
                 SpriteBundle {

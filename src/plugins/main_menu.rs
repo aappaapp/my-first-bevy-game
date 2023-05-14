@@ -11,21 +11,13 @@ impl Plugin for MainMenuPlugin {
     }
 }
 
-fn cleanup(
-    camera_query: Query<Entity, With<Camera>>,
-    mut commands: Commands,
-    ui_query: Query<Entity, With<Node>>,
-) {
-    for camera in camera_query.iter() {
-        commands.entity(camera).despawn();
-    }
+fn cleanup(mut commands: Commands, ui_query: Query<Entity, With<Node>>) {
     for ui in ui_query.iter() {
         commands.entity(ui).despawn();
     }
 }
 
 fn setup(asset_server: Res<AssetServer>, mut commands: Commands) {
-    commands.spawn(Camera2dBundle::default());
     commands
         .spawn(NodeBundle {
             style: Style {
