@@ -16,8 +16,13 @@ jobs:
                   toolchain: 1.69.0
             - name: build
               run: cargo build -r --target x86_64-pc-windows-msvc
+            - name: r
+              run: |
+                  mkdir windows
+                  mv target/x86_64-pc-windows-msvc/release/${{ env.binary-name }}.exe windows/${{ env.binary-name }}.exe
+                  mv assets windows/assets
             - name: upload artifact
               uses: actions/upload-artifact@v3
               with:
                   name: Windows Build
-                  path: target/x86_64-pc-windows-msvc/release/${{ env.binary-name }}.exe
+                  path: windows
